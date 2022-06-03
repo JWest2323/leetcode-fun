@@ -1,10 +1,18 @@
 
 var StockPrice = function() {
-    this.stocksPrice = [];
-    this.timeStamps = [];
-    this.lastPrice = [0,0];
-    this.max = Number.NEGATIVE_INFINITY;
-    this.min = Number.POSITIVE_INFINITY;
+    // create min heap var
+    this.minHeap = new MinPriorityQueue({
+        compare: (a,b) => a.price > b.price,
+    });
+    // create max heap var
+    this.maxHeap = new MaxPriorityQueue({
+        compare: (a,b) => a.price < b.price,
+    });
+    // create a prices map to track prices
+    this.prices = new Map();
+    // create currPrice obj to use for return
+    this.currPrice = {};
+    
 };
 
 /** 
@@ -13,45 +21,44 @@ var StockPrice = function() {
  * @return {void}
  */
 StockPrice.prototype.update = function(timestamp, price) {
-    let idx = this.timeStamps.indexOf(timestamp); // check if timestamp was prev seen using indexOf
-    if (idx === -1) { // if not found
-        this.timeStamps.push(timestamp);
-        this.stocksPrice.push(price);
-        this.max = Math.max(this.max, price); // use curr price to set max
-        this.min = Math.min(this.min, price); // use curr price to set min
-    } else { // timestamp found
-        if (this.max === this.stocksPrice[idx] || this.min === this.stocksPrice[idx]) { // check if this was a prev max/min
-            this.stocksPrice[idx] = price; 
-            this.max = Math.max(...this.stocksPrice); // use entire stocksPrice arr to set max
-            this.min = Math.min(...this.stocksPrice); // use entire stocksPrice arr to set max
-        } else { // was not a prev max/min but timestamp still found
-            this.stocksPrice[idx] = price; 
-            this.max = Math.max(this.max, price); // use curr price to set max
-            this.min = Math.min(this.min, price); // use curr price to set min
-        }
+    this.prices.set(timestamp, price);
+    this.minHeap.enqueue({ timestamp, price });
+    this.maxHeap.enqueue({ timestamp, price });
+    
+    if (!this.currPrice.timestamp || this.currPrice.timestamp <= timestamp) { // if currPrice null or more recent timestamp update 
+        this.currPrice = {timestamp, price};
     }
-    if (timestamp >= this.lastPrice[0]) this.lastPrice = [timestamp, price]; // if curr timestamp greater than lastPrice, update
 };
 
 /**
  * @return {number}
  */
 StockPrice.prototype.current = function() {
-    return this.lastPrice[1];
+    return this.currPrice.price;
 };
 
 /**
  * @return {number}
  */
 StockPrice.prototype.maximum = function() {
-    return this.max;
+    let front = this.maxHeap.front(); // get most recent max obj
+    while (this.prices.get(front.timestamp) !== front.price) { // if most recent max price and timestamp assoc dont match  
+        this.maxHeap.dequeue(); // dequeue from max heap
+        front = this.maxHeap.front(); // update front var to next max
+    }
+    return front.price; // ret front.price
 };
 
 /**
  * @return {number}
  */
 StockPrice.prototype.minimum = function() {
-    return this.min;
+    let front = this.minHeap.front(); // get most recent min obj
+    while (this.prices.get(front.timestamp) !== front.price) { // while price and timestamp dont match
+        this.minHeap.dequeue(); // dequeue from min heap
+        front = this.minHeap.front(); // update front var to next min
+    }
+    return front.price; // ret front.price
 };
 
 /** 
