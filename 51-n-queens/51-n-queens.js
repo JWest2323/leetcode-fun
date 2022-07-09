@@ -5,7 +5,7 @@
 var solveNQueens = function(n) {
     if (!n) return [];
     let res = [];
-    let cols = new Set(), posDiag = new Set(), negDiag = new Set(); // crate sets to be used to check if spot valid or not
+    let cols = new Set(), posDiag = new Set(), negDiag = new Set(); // create sets to be used to check if spot valid or not
     let board = Array.from({length: n}, () => new Array(n).fill(".")); // create an nxn board w n ...'s
     
     function backtrack (r) {
