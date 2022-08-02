@@ -3,16 +3,17 @@
  * @return {number[]}
  */
 var dailyTemperatures = function(temps) {
-    let res = new Array(temps.length).fill(0); // prefill array of length of temps w 0
-    let stack = []; // create stack var
-    for (let i = temps.length - 1; i >= 0; i--) { 
-        let temp = temps[i]; // store curr temp going r -> l
-        while (stack.length && stack[stack.length - 1][0] <= temp) { // if stack !empty & current temp >= stack.top()
-            stack.pop(); // pop until we come across larger temp or until empty
+    let n = temps.length; // store temps length
+    let res = new Array(n).fill(0); // use temps.length to create res arr
+    let stack = []; // create monotonic stack to track temps
+    // loop through each daily temp
+    for (let currDay = 0; currDay < n; currDay++) {
+        let currTemp = temps[currDay]; // store current temperature
+        while (stack.length > 0 && temps[stack[stack.length - 1]] < currTemp) { // if something already on stack & current temp > stack.peek()
+            let prevDay = stack.pop(); // store previous day idx
+            res[prevDay] = currDay - prevDay; // use difference in idx to calc number of days until hotter day
         }
-        let numOfDays = stack.length ? (stack[stack.length - 1][1] - i) : 0; // if stack has el, cur idx numOfDays = last hot day - idx
-        res[i] = numOfDays; // store val in res
-        stack.push([temp, i]); // push curr temp and curr idx
+        stack.push(currDay); // either once stack empty or colder day found, push currDay
     }
-    return res; // return res
+    return res; // return res arr
 };
