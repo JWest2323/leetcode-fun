@@ -17,14 +17,14 @@
  */
 var isSubtree = function(root, subRoot) {
     var isEqual = function(node1, node2) {
-      if (!node1 || !node2) return !node1 && !node2;
-      if (node1.val !== node2.val) return false;
-      return isEqual(node1.left, node2.left) && isEqual(node1.right, node2.right);
+      if (!node1 || !node2) return !node1 && !node2; // if either node == null, ret XAND
+      if (node1.val !== node2.val) return false; // if node vals !=, ret false
+      return isEqual(node1.left, node2.left) && isEqual(node1.right, node2.right); // recursively check l&r
     }
     var dfs = function(node) {
         if (!node) return false;
-        if (isEqual(node, subRoot)) return true;
-        return dfs(node.left) || dfs(node.right);
+        if (isEqual(node, subRoot)) return true; // use helper func to determine same subTree, if so, ret true
+        return dfs(node.left) || dfs(node.right); // else check either node.left or node.right
     }
-    return dfs(root);
+    return dfs(root); // call and ret on root
 };
