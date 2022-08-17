@@ -3,21 +3,19 @@
  * @return {number[][]}
  */
 var minimumAbsDifference = function(arr) {
-    if (!arr) return [];
-    arr.sort((a,b) => {return a - b});
-    let map = new Map();
-    let minAbsDiff = Infinity;
-    for (let i = 0; i < arr.length; i++) {
-        let currAbsDiff = Math.abs(arr[i] - arr[i + 1]);
-        if (currAbsDiff < minAbsDiff) minAbsDiff = currAbsDiff; 
-        if (!map.has(currAbsDiff)) {
-            map.set(currAbsDiff, []);
-            map.get(currAbsDiff).push([arr[i], arr[i + 1]]);
-        } else {
-            map.get(currAbsDiff).push([arr[i], arr[i + 1]]);
+    arr.sort((a,b) => {return a - b}); // sort ascending order
+    let minDiff = Infinity; // init maxDiff var
+    let res = []; // init res arr
+    // loop from idx 1 thru length of arr
+    for (let i = 1; i < arr.length; i++) {
+        let currDiff = arr[i] - arr[i - 1]; // calc a curr diff
+        if (currDiff < minDiff) { // if < minDiff: reset res & update minDiff
+            res = [];
+            minDiff = currDiff;
         }
+        if (currDiff == minDiff) res.push([arr[i - 1], arr[i]]); // if == : push to res
     }
-    return map.get(minAbsDiff)
+    return res;
     
     
 };
