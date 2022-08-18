@@ -4,7 +4,7 @@
  */
 var countBits = function(n) {
     let res = new Array(n + 1).fill(0); // init res arr w 0s
-    let offset = 1; // init offset to 1 to 
+    let offset = 1; // init offset to 1
     // loop from 1 to n + 1 to fill res arr
     for (let i = 1; i < n + 1; i++) {
         if (offset * 2 === i) { // for every 2 bits, update offset
