@@ -3,19 +3,17 @@
  * @return {number[][]}
  */
 var minimumAbsDifference = function(arr) {
-    arr.sort((a,b) => {return a - b}); // sort ascending order
-    let minDiff = Infinity; // init maxDiff var
-    let res = []; // init res arr
-    // loop from idx 1 thru length of arr
-    for (let i = 1; i < arr.length; i++) {
-        let currDiff = arr[i] - arr[i - 1]; // calc a curr diff
-        if (currDiff < minDiff) { // if < minDiff: reset res & update minDiff
-            res = [];
-            minDiff = currDiff;
-        }
-        if (currDiff == minDiff) res.push([arr[i - 1], arr[i]]); // if == : push to res
+    if (!arr) return [];
+    let minAbsDiff = Infinity, res = []; // init minAbsDiff as large num & empty res arr
+    arr.sort((a, b) => a - b); // sort arr in ascend. order
+    // loop arr to calc minAbsDiff
+    for (let i = 0; i < arr.length - 1; i++) {
+        let currAbsDiff = arr[i + 1] - arr[i];
+        minAbsDiff = Math.min(minAbsDiff, currAbsDiff);
     }
-    return res;
-    
-    
+    // loop once more to see which adj elements === minAbsDiff
+    for (let i = 0; i < arr.length - 1; i++) {
+        if (minAbsDiff === arr[i + 1] - arr[i]) res.push([arr[i], arr[i + 1]]);
+    }
+    return res; 
 };
