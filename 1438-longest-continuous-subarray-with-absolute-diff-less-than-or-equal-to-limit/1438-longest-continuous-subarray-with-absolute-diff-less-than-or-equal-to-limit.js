@@ -4,28 +4,24 @@
  * @return {number}
  */
 var longestSubarray = function(nums, limit) {
-    let count = 0, res = 0, cur = []; // init a count & res var, and cur arr to store contin. el
-    let min = Number.MAX_SAFE_INTEGER; // init min to large num
-    let max = Number.MIN_SAFE_INTEGER; // init max to small num
-    
-    for (let idx = 0; idx < nums.length; idx++) {
-        cur.push(nums[idx]);
-        if (cur.length < res) continue; // continue building up to prev res if curr.length < res
-        min = Math.min(min, nums[idx]);
-        max = Math.max(max, nums[idx]);
-        // calc diff
-        let diff = Math.abs(max - min);
-        if (diff <= limit) {
-            // update count if within limit
-            count = cur.length;
-        } else {
-            // else shift from front and check if it was min || max
-            let el = cur.shift();
-            if (el === min) min = Math.min(...cur);
-            if (el === max) max = Math.max(...cur);
+    let minQ = [], maxQ = []; // init min & max queues
+    let start = 0, res = 0; // init a start & res counter vars to 0
+    // loop the length of nums, using end counter
+    for (let end = 0; end < nums.length; end++) {
+        // store each num in nums
+        let num = nums[end]; 
+        // continue to check both queues for vals that break max & min property, if so pop()
+        while (maxQ.length > 0 && maxQ[maxQ.length -1] < num) maxQ.pop();
+        while (minQ.length > 0 && minQ[minQ.length - 1] > num) minQ.pop();
+        // push cur num to both maxQ & minQ
+        maxQ.push(num);
+        minQ.push(num);
+        if (maxQ[0] - minQ[0] > limit) { // if abs diff > limit
+            if (maxQ[0] === nums[start]) maxQ.shift(); // if our starting window === maxQ[0], shift off
+            if (minQ[0] === nums[start]) minQ.shift(); // if our starting window === minQ[0], shift off
+            start++; // move start to update window
         }
-        // update res using count
-        res = Math.max(res, count);
-    } 
-    return res; // return res                                              
+        res = Math.max(res, end - start + 1); // update res using largest window length
+    }
+    return res;
 };
