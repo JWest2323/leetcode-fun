@@ -12,13 +12,23 @@
  */
 var invertTree = function(root) {
     if (!root) return null;
+    // first case if both l & r nodes present
+    if (root.left && root.right) {
+        let temp = root.left;
+        root.left = root.right;
+        root.right = temp;
+    // case of only l
+    } else if (root.left && !root.right) {
+        root.right = root.left;
+        root.left = null
+    // case of only r
+    } else if (!root.left && root.right) {
+        root.left = root.right;
+        root.right = null;
+    }
+    // make recursive calls on both l & r
+    invertTree(root.left);
+    invertTree(root.right);
     
-    let temp = root.left;
-    root.left = root.right;
-    root.right = temp;
-    
-    if (root.left) invertTree(root.left);
-    if (root.right) invertTree(root.right);
-     
-    return root;
+    return root; // return root
 };
