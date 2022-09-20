@@ -15,7 +15,6 @@ var sumNumbers = function(root) {
     function dfs(node, curVal) {
         if (!node) return;
         curVal += node.val;
-        
         if (!node.left && !node.right) {
             total += parseInt(curVal);
             return;
