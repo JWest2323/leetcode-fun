@@ -10,16 +10,11 @@
  * @param {Node|null} root
  * @return {number[]}
  */
-var preorder = function(root) {
-    if (!root) return [];
-    let q = [root], res = [];
-    while (q[0]) {
-        let cur = q.pop();
-        res.push(cur.val)
-        cur.children.reverse();
-        for (let child of cur.children) {
-            q.push(child)
-        }
+var preorder = function(root, res = []) {
+    if (!root) return res;
+    res.push(root.val);
+    for (let child of root.children) {
+        preorder(child, res);
     }
     return res;
 };
