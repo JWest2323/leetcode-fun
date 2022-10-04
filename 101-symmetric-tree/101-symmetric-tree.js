@@ -11,19 +11,20 @@
  * @return {boolean}
  */
 var isSymmetric = function(root) {
-    let q = [root, root];
-    while (q.length > 0) {
-        let subTree1 = q.pop();
-        let subTree2 = q.pop();
+    if (!root) return true;
+    let q = [root.left, root.right];
+    while (q.length) {
+        let l = q.shift();
+        let r = q.shift();
         
-        if (!subTree1 && !subTree2) continue;
-        if (!subTree1 && subTree2 || !subTree2 && subTree1 || subTree1.val !== subTree2.val) return false;
+        if (!l && !r) continue;
         
-        q.push(subTree1.left);
-        q.push(subTree2.right);
+        if (!l && r || l && !r || l.val !== r.val) return false;
         
-        q.push(subTree1.right);
-        q.push(subTree2.left);
+        q.push(l.left);
+        q.push(r.right);
+        q.push(l.right);
+        q.push(r.left);
     }
     return true;
 };
