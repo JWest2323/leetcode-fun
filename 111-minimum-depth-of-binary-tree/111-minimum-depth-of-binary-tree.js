@@ -12,14 +12,18 @@
  */
 var minDepth = function(root) {
     if (!root) return 0;
-    let stack = [[root, 1]], min = Infinity;
-    while (stack[0]) {
-        let node = stack.pop();
-        if (!node[0].left && !node[0].right) {
-            min = Math.min(min, node[1]);
+    let q = [root], depth = 1, res = Infinity;
+    while (q[0]) {
+        let qLen = q.length;
+        for (let i = 0; i < qLen; i++) {
+            let cur = q.shift();
+            if (!cur.left & !cur.right) return depth;
+            else {
+                if (cur.left) q.push(cur.left);
+                if (cur.right) q.push(cur.right);
+            }
         }
-        if (node[0].left) stack.push([node[0].left, node[1] + 1]);
-        if (node[0].right) stack.push([node[0].right, node[1] + 1]);
+        depth++;
     }
-    return min;
+    return depth;
 };
