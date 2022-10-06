@@ -11,12 +11,22 @@
  * @return {boolean}
  */
 var isBalanced = function(root) {
-    // define recursive helper func to calc tree height
-    function height (node) {
-        if (!node) return -1;
-        return 1 + Math.max(height(node.left), height(node.right)); // ret larger l or r height +1
+    let stack = [root, root];
+    let height = new Map();
+    height.set(null, 0);
+    while (stack.length > 0) {
+        let cur = stack.pop();
+        if (!cur) continue;
+        if (stack.length && stack[stack.length - 1] == cur) {
+            stack.push(cur.right);
+            stack.push(cur.right);
+            stack.push(cur.left);
+            stack.push(cur.left);
+        } else {
+            let lHeight = height.get(cur.left), rHeight = height.get(cur.right);
+            if (Math.abs(lHeight - rHeight) > 1) return false;
+            height.set(cur, Math.max(lHeight, rHeight) + 1);
+        }
     }
-    if (!root) return true;
-    return (Math.abs(height(root.left) - height(root.right)) < 2 && // check curr height isBalanced
-                    isBalanced(root.left) && isBalanced(root.right)); // recursively check subtrees 
+    return true;
 };
