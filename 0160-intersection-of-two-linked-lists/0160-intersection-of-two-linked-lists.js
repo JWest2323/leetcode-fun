@@ -12,20 +12,17 @@
  * @return {ListNode}
  */
 
-// O(N x M) time complexity
+// O(N + M) time complexity, O(1) space complexity
 var getIntersectionNode = function(headA, headB) {
-    // loop each node in headA
-    while (headA) {
-        // create copy of each node in headB
-        let headBCopy = headB;
-        // check each node from headBCopy against cur node in headA
-        while(headBCopy) {
-            // if headA == headBCopy, return headA
-            if (headA === headBCopy) return headA;
-            // else move headBCopy to next node
-            headBCopy = headBCopy.next;
-        }
-        // once out of inner while, move headA to next node
-        headA = headA.next;
+    // init ptrs at the start of each resp. list
+    let a = headA, b = headB;
+    // while those ptrs are not equal
+    while(a !== b) {
+        // if either resp. ptr has reached a null node, set to beginning of opposite list
+        // else set to next node in resp. list
+        a = !a ? headB : a.next;
+        b = !b ? headA : b.next;
     }
+    // once out of while, a points to either the intersecting node or null ptr
+    return a;
 };
