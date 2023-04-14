@@ -1,32 +1,28 @@
 /**
  * @param {number[][]} edges
  * @return {number[]}
- * O(n^2) time complexity, n = edges.length
+ * O(n) time complexity, n = edges.length
  */
 var findRedundantConnection = function(edges) {
-    let adjList = {};
-    
-    const dfs = (cur, target, prev) => {
-        if (cur === target) return true;
-        for (let nbr of adjList[cur]) {
-            // if nbr != prev & cur == target on next dfs call, return true denoting cycle
-            if (nbr !== prev && dfs(nbr, target, cur)) return true;
-        }
-        // no cycles detected yet, return false
-        return false;
+    // init disjoint set data structure
+    let uf = {};
+    // find parent set
+    function find (x) {
+        // if no parent, set x as parent
+        if (!uf[x]) uf[x] = x;
+        // if parent exist && equal to x, return x
+        if (uf[x] === x) return x
+        
+        return find(uf[x]); // else find parent of parent
     }
-    
-    // loop each edge in edges arr
+    // set union of two sets
+    function union (x, y) {
+        // call find on both x and y, & set lower parent's subparent to higher parent
+        uf[find(x)] = uf[find(y)];
+    }
+    // loop edges arr
     for (let [a, b] of edges) {
-        // if node !exist in adjList yet, init []
-        if (!adjList[a]) adjList[a] = [];
-        if (!adjList[b]) adjList[b] = [];
-        
-        // push respective edges
-        adjList[a].push(b);
-        adjList[b].push(a);
-        
-        // for each new added edge, make dfs call w a node as target, if true, cycle detected, return edge
-        if (dfs(b, a, a)) return [a, b]
+        if (find(a) === find(b)) return [a, b]; // if two edges parents are ===, return edge
+        else union(a, b); // else call union
     }
 };
