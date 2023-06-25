@@ -11,21 +11,20 @@
  * @return {number}
  */
 var maxDepth = function(root) {
-    if (!root) return 0; // return 0 if given empty root
+    let res = 0;
     
-    // init queue with root and max var to 0
-    let q = [root], max = 0;
-    
-    // loop while elements in queue
-    while (q.length) {
-        let newQ = []; // init newQ to track elements of next level
-        for (let el of q) {
-            if (!el) continue;
-            newQ.push(el.left);
-            newQ.push(el.right);
-        }
-        if (newQ.length) max++; // if elements present in next, incre max var
-        q = newQ; // set q to elements of newQ
+    const depth = (node, curDepth) => {
+        if (!node) return;
+        
+        res = Math.max(res, ++curDepth);
+        
+        depth(node.left, curDepth);
+        depth(node.right, curDepth);
+        
+        return curDepth;
     }
-    return max;
-};
+    
+    depth(root, 0);
+    
+    return res;
+ };
