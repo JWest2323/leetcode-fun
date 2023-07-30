@@ -3,14 +3,25 @@
  * @return {void} Do not return anything, modify matrix in-place instead.
  */
 var rotate = function(matrix) {
-    let n = matrix.length;
-    // start for loop from matrix[last row][first col]
-    for (let row = n - 1; row >= 0; row--) {
-        for (let col = 0; col < n; col++) {
-            // shift from cur row
-            let item = matrix[row].shift();
-            // push to cur col
-            matrix[col].push(item);
+    let l = 0, r = matrix.length - 1;
+    
+    while (l < r) {
+        for (let idx = 0; idx < r - l; idx++) {
+            let top = l, bottom = r;
+            
+            let topLeft = matrix[top][l + idx];
+            // move bottom left to top left
+            matrix[top][l + idx] = matrix[bottom - idx][l];
+            
+            // move bottom right to bottom left
+            matrix[bottom - idx][l] = matrix[bottom][r - idx];
+            
+            // move top right to bottom right
+            matrix[bottom][r - idx] = matrix[top + idx][r];
+            
+            // move top left to top right
+            matrix[top + idx][r] = topLeft;
         }
+        l++, r--;
     }
 };
