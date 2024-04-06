@@ -7,12 +7,11 @@ var subsets = function(nums) {
     
     const backtrack = (curSub, idx) => {
         if (idx == nums.length) {
-            res.push(curSub.slice());
+            res.push(curSub);
             return;
         }
-        curSub.push(nums[idx]);
-        backtrack(curSub, idx + 1);
-        curSub.pop();
+        
+        backtrack([...curSub, nums[idx]], idx + 1);
         backtrack(curSub, idx + 1);
     }
     
