@@ -3,21 +3,19 @@
  * @return {number}
  */
 var trap = function(height) {
-    let l = 0, r = height.length - 1; // init l & r ptrs to 0 & height.length - 1 resp.
-    let res = 0; // init res to 0
-    let leftMax = 0, rightMax = 0; // init left & right max to 0
-    // loop until ptrs cross
-    while (l < r) {
-        if (height[l] < height[r]) { // update whichever ptrs has smaller height
-            // // if new bounded max found, update, else calc incre to res
-            height[l] >= leftMax ? (leftMax = height[l]) : res += leftMax - height[l]; 
-            l++; // incre l ptr
-        } else {
-            // if new bounded max found, update, else calc incre to res
-            height[r] >= rightMax ? (rightMax = height[r]) : res += rightMax - height[r];
-            r--; // decre r ptr
-        }
-    }
-    // return res
+    if (!height.length) return 0;
+    let res = 0, n = height.length;
+    let lMax = new Array(n), rMax = new Array(n);
+    
+    lMax[0] = height[0], rMax[n - 1] = height[n - 1];
+    
+    for (let i = 1; i < n; i++) 
+        lMax[i] = Math.max(height[i], lMax[i - 1]);
+    for (let i = n - 2; i >= 0; i--) 
+        rMax[i] = Math.max(height[i], rMax[i + 1]);
+    
+    for (let i = 1; i < n; i++)
+        res += Math.min(lMax[i], rMax[i]) - height[i];
+
     return res;
 };
