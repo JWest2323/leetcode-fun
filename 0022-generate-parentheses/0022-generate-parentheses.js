@@ -3,15 +3,24 @@
  * @return {string[]}
  */
 var generateParenthesis = function(n) {
-    let res = [];
+    let stack = [], res = [];
     
-    const generate = (open, close, str) => {
-        if (!open && !close && str.length) return res.push(str);
-        if (open) generate(open - 1, close, str + '(');
-        if (close > open) generate(open, close - 1, str + ')');
+    const backtrack = (open, close) => {
+        if (open == close && close == 0) {
+            res.push(stack.join(''));
+            return;
+        }
+        if (open > 0) {
+            stack.push('(');
+            backtrack(open - 1, close);
+            stack.pop();
+        }
+        if (close > open) {
+            stack.push(')');
+            backtrack(open, close - 1);
+            stack.pop();
+        }
     }
-    
-    generate(n, n, '');
-    
+    backtrack(n, n);
     return res;
 };
