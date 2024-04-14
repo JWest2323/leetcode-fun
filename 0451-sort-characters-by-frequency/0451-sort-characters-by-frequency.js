@@ -10,8 +10,7 @@ var frequencySort = function(s) {
     
     let sortedEntries = [...charFreq.entries()].sort((a, b) => b[1] - a[1]);
     
-    for (let entry of sortedEntries) {
-        let char = entry[0], freq = entry[1];
+    for (let [char, freq] of sortedEntries) {
         while (freq > 0) 
             res += char, freq--;
     }
