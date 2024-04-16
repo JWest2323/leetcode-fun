@@ -4,8 +4,8 @@
  * @return {number[][]}
  */
 var kClosest = function(points, k) {
-    let res = [], dists = new Map();
-    let idx = 0;
+    let res = [], dists = new Map(), idx = 0;
+    
     for (let [x, y] of points) {
         let dist = Math.sqrt(Math.pow((x - 0), 2) + Math.pow((y - 0), 2));
         dists.set(idx, dist);
@@ -15,8 +15,8 @@ var kClosest = function(points, k) {
     let sortedEntries = [...dists.entries()].sort((a, b) => a[1] - b[1]);
     
     while (k > 0) {
-        let closest = sortedEntries.shift()[0];
-        res.push(points[closest]);
+        let nextClosest = sortedEntries.shift()[0];
+        res.push(points[nextClosest]);
         k--;
     }
     return res;
