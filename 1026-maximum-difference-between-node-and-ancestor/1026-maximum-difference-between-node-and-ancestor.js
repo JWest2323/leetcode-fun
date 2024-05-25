@@ -12,20 +12,20 @@
  */
 var maxAncestorDiff = function(root) {
     let res = -Infinity;
-    
-    const dfs = (node, min, max) => {
+
+    const dfs = (node, low, hi) => {
         if (!node) return;
-        
-        min = min === null ? node.val : Math.min(node.val, min);
-        max = max === null ? node.val : Math.max(node.val, max);
-        
-        dfs(node.left, min, max);
-        dfs(node.right, min, max);
-        
-        res = Math.max(Math.abs(max - min), res);
+
+        low = Math.min(low, node.val);
+        hi = Math.max(hi, node.val);
+
+        res = Math.max(res, Math.abs(hi - low));
+
+        dfs(node.left, low, hi);
+        dfs(node.right, low, hi);
     }
-    
-    dfs(root, null, null);
-    
+
+    dfs(root, Infinity, -Infinity);
+
     return res;
 };
