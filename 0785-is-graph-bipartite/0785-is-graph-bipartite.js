@@ -6,21 +6,23 @@ var isBipartite = function(graph) {
     let n = graph.length;
     let color = new Array(n).fill(-1);
     
-    function dfs(node) {
-        for (let nbr of graph[node]) {
-            if (color[nbr] === color[node]) return false;
-            if (color[nbr] === -1) {
-                color[node] == 0 ? color[nbr] = 1 : color[nbr] = 0;
-                if (!dfs(nbr)) return false;
+    for (let start = 0; start < n; start++) {
+        if (color[start] === -1) {
+            let stack = [start];
+            color[start] = 0;
+            
+            while(stack.length > 0) {
+                let node = stack.pop();
+                let nbrs = [...graph[node]];
+                for (let nbr of nbrs) {
+                    if (color[nbr] === -1) {
+                        stack.push(nbr);
+                        color[nbr] = color[node] ^ 1;
+                    } else if (color[nbr] === color[node]) {
+                        return false;
+                    }
+                } 
             }
-        }
-        return true;
-    }
-    
-    for (let v = 0; v < n; v++) {
-        if(color[v] == -1){
-            color[v] = 0;
-            if (!dfs(v)) return false;
         }
     }
     return true;
