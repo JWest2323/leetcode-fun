@@ -11,10 +11,11 @@
  * @return {number[]}
  */
 var largestValues = function(root) {
+    if (!root) return [];
+    
     let res = [], queue = [root];
 
     while (queue.length) {
-        if (!root) return [];
         let curLvlMax = -Infinity, qLen = queue.length;
         
         for (let i = 0; i < qLen; i++) {
@@ -28,6 +29,5 @@ var largestValues = function(root) {
         }
         res.push(curLvlMax);
     }
-
     return res;
 };
