@@ -1,83 +1,35 @@
-// /**
-//  * @param {number} numCourses
-//  * @param {number[][]} prerequisites
-//  * @return {boolean}
-//  */
-// var canFinish = function(numCourses, prerequisites) {
-//     let indegree = new Array(numCourses).fill(0);
-
-//     for (let [course, prereq] of prerequisites) {
-//         indegree[course] += 1;
-//     }
-
-//     let q = [];
-//     for (let degree of indegree) {
-//         if (degree === 0) 
-//             q.push(degree)
-//     }
-//     let count = 0;
-//     console.log(q)
-
-//     while (q.length) {
-//         const curCourse = q.pop();
-//         count++;
-
-//         for (let [course, prereq] of prerequisites) {
-//             if (prereq === curCourse) {
-//                 indegree[course] -= 1;
-//                 if (indegree[course] === 0) {
-//                     q.push(course);
-//                 }
-//             }
-//         }
-//     }
-//     return count === numCourses;
-// };
 /**
  * @param {number} numCourses
  * @param {number[][]} prerequisites
  * @return {boolean}
  */
-var canFinish = function(numCourses, prerequisites) {
-  const indegree = new Array(numCourses).fill(0);
-  const queue = [];
-  /**
-   * The goal is to find whether the course graph has cycles.
-   * 
-   * We are looking for the number of indgree for each course and 
-   * put the course with no indegree into the queue. As we go 
-   * through the courses in queue, we break off the dependency(edge)
-   * from the current course in queue in all the prerequisite 
-   * pairs. Then we put all the courses with zero indegree into
-   * the queue. Repeat until the queue is empty. We maintain a 
-   * count and increment it each time we pop the queue. The count 
-   * will equal to the number of courses when there's no cycle and it 
-   * is possible to take all the courses.
-   *
-   * directed graph denotes: [prereq] --> [course] 
-   */
-  for (const [course, prereq] of prerequisites) {
-    indegree[course] += 1;
-  }
-  for (let i = 0; i < indegree.length; i++) {
-    if (indegree[i] === 0) {
-      queue.push(i);
-    } 
-  }
-  let count = 0;
-  
-  while (queue.length !== 0) { 
-    const c = queue.pop();
-    count += 1;
-    
-    for (const [course, prereq] of prerequisites) {
-      if (prereq === c) {
-        indegree[course] -= 1;
-        if (indegree[course] === 0) {
-          queue.push(course);
-        }
-      }
+var canFinish = function (numCourses, prerequisites) {
+    let indegree = new Array(numCourses).fill(0);
+
+    for (let [course, prereq] of prerequisites) {
+        indegree[course] += 1;
     }
-  }
-  return count === numCourses;
+
+    let q = [];
+    for (let i = 0; i < indegree.length; i++) {
+        if (indegree[i] === 0) {
+            q.push(i);
+        }
+    }
+    let count = 0;
+
+    while (q.length) {
+        const curCourse = q.pop();
+        count++;
+
+        for (let [course, prereq] of prerequisites) {
+            if (prereq === curCourse) {
+                indegree[course] -= 1;
+                if (indegree[course] === 0) {
+                    q.push(course);
+                }
+            }
+        }
+    }
+    return count === numCourses;
 };
