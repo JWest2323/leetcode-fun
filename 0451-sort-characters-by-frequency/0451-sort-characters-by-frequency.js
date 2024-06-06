@@ -3,16 +3,19 @@
  * @return {string}
  */
 var frequencySort = function(s) {
-    let charFreq = new Map(), res = '';
+    let res = '', freqMap = new Map();
     
-    for (let char of s) 
-        charFreq.set(char, (charFreq.get(char) + 1) || 1);
+    for (let char of s) {
+        freqMap.set(char, freqMap.get(char) + 1 || 1);
+    }
     
-    let sortedEntries = [...charFreq.entries()].sort((a, b) => b[1] - a[1]);
+    let sortedEntries = [...freqMap.entries()].sort((a, b) => b[1] - a[1]);
     
-    for (let [char, freq] of sortedEntries) {
-        while (freq > 0) 
-            res += char, freq--;
+    for (let [char, count] of sortedEntries) {
+        while (count > 0) {
+            res += char;
+            count--;
+        }
     }
     
     return res;
