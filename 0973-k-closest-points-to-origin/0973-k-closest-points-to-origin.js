@@ -3,18 +3,19 @@
  * @param {number} k
  * @return {number[][]}
  */
-var kClosest = function(points, k) {
-    let maxHeap = new MaxPriorityQueue(), res = [];
+var kClosest = function(points, k) {    
+    let res = [], distMap = new Map();
     
     for (let [x, y] of points) {
-        let d = x * x + y * y;
-        maxHeap.enqueue([x, y], d);
-        if (maxHeap.size() > k)
-            maxHeap.dequeue();
+        let dist = Math.pow(x, 2) + Math.pow(y, 2);
+        distMap.set([x,y], dist);
     }
+    let sortedDistances = [...distMap.entries()].sort((a, b) => b[1] - a[1]);
     
-    while (maxHeap.size())
-        res.push(maxHeap.dequeue().element);
+    while (k > 0) {
+        res.push(sortedDistances.pop()[0]);
+        k--
+    }
     
     return res;
 };
