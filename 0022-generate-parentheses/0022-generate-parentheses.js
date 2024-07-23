@@ -2,25 +2,26 @@
  * @param {number} n
  * @return {string[]}
  */
-var generateParenthesis = function(n) {
-    let stack = [], res = [];
-    
-    const backtrack = (open, close) => {
-        if (open == close && close == 0) {
-            res.push(stack.join(''));
+var generateParenthesis = function (n) {
+    let res = [];
+
+    const backtrack = (curCombo, open, close) => {
+        if (curCombo.length === 2 * n) {
+            res.push(curCombo);
             return;
         }
-        if (open > 0) {
-            stack.push('(');
-            backtrack(open - 1, close);
-            stack.pop();
+
+
+        if (open < n) {
+            backtrack(curCombo + "(", open + 1, close);
         }
-        if (close > open) {
-            stack.push(')');
-            backtrack(open, close - 1);
-            stack.pop();
+
+        if (close < open) {
+            backtrack(curCombo + ")", open, close + 1);
         }
     }
-    backtrack(n, n);
+
+    backtrack("", 0, 0);
+
     return res;
 };
