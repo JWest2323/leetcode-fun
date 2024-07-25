@@ -11,23 +11,21 @@
  * @return {number[]}
  */
 var largestValues = function(root) {
-    if (!root) return [];
-    
-    let res = [], queue = [root];
+    let res = [], q = [root];
 
-    while (queue.length) {
-        let curLvlMax = -Infinity, qLen = queue.length;
-        
-        for (let i = 0; i < qLen; i++) {
-            let node = queue.shift();
-            curLvlMax = Math.max(curLvlMax, node.val);
+    while (q.length > 0) {
+        let curLevel = [], newQ = [];
+        for (let el of q) {
+            if (!el) continue;
+            curLevel.push(el.val);
 
-            if (node.left)
-                queue.push(node.left);
-            if (node.right)
-                queue.push(node.right);
+            if (el.left)
+                newQ.push(el.left);
+            if (el.right)
+                newQ.push(el.right);
         }
-        res.push(curLvlMax);
+        res.push(Math.max(...curLevel));
+        q = newQ;
     }
     return res;
 };
