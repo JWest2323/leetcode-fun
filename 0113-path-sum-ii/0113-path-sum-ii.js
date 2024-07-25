@@ -12,26 +12,21 @@
  * @return {number[][]}
  */
 var pathSum = function(root, targetSum) {
-    // init res array for return
     let res = [];
-    
-    // define pre-order dfs helper func
-    const dfs = (node, path, remainingSum) => {
-        
-        if (!node) return;
-        
-        // if at a leaf node & remaining sum == current node.val
-        if (!node.left && !node.right && remainingSum == node.val) {
-            // push copy of path, incl current node.val, to res
-            res.push([...path, node.val]);
+
+    const dfs = (node, target, curPath) => {
+        if (!node.left && !node.right && target - node.val === 0) {
+            res.push([...curPath, node.val]);
             return;
         }
-        // explore left & right, updating current path and remaining sum
-        dfs(node.left, [...path, node.val], remainingSum - node.val);
-        dfs(node.right, [...path, node.val], remainingSum - node.val);
+
+        if (node.left)
+            dfs(node.left, target - node.val, [...curPath, node.val]);
+        if (node.right)
+            dfs(node.right, target - node.val, [...curPath, node.val]);
     }
-    
-    dfs(root, [], targetSum);
-    
+
+    dfs(root, targetSum, []);
+
     return res;
 };
