@@ -12,17 +12,16 @@
  * @return {number}
  */
 var kthSmallest = function(root, k) {
-    let nodeVals = [];
-    
-    const visit = (node) => {
+    let res = [];
+    const inorder = (node) => {
+        if (res.length === k) return;
         if (!node) return;
         
-        visit(node.left);
-        nodeVals.push(node.val);
-        visit(node.right);
+        inorder(node.left);
+        res.push(node.val);
+        inorder(node.right);
     }
-    
-    visit(root);
-    
-    return nodeVals[k - 1];
+
+    inorder(root);
+    return res[k - 1];
 };
