@@ -4,26 +4,36 @@
  * @return {number}
  */
 var search = function(nums, target) {
-    let l = 0, r = nums.length - 1;
+    let n = nums.length;
+    let l = 0, r = n - 1;
     
     while (l <= r) {
         let mid = Math.floor((l + r) / 2);
-        if (nums[mid] == target) return mid;
-        
-        // nums[mid] in the left sorted portion
-        if (nums[l] <= nums[mid]) {
-            if (target > nums[mid] || target < nums[l])
-                l = mid + 1;
-            else 
-                r = mid - 1;
-            
-        // nums[mid] in the right sorted portion
+        if (nums[mid] > nums[n - 1]) {
+            l = mid + 1;
         } else {
-            if (target < nums[mid] || target > nums[r]) 
-                r = mid - 1;
-            else 
-                l = mid + 1;
+            r = mid - 1;
         }
     }
-    return -1;
+    
+    const binSea = (left, right, target) => {
+        let l = left, r = right;
+        while (l <= r) {
+            let mid = Math.floor((l + r) / 2);
+            if (nums[mid] == target) {
+                return mid;
+            } else if (nums[mid] > target) {
+                r = mid - 1;
+            } else {
+                l = mid + 1;
+            }
+        }
+        return -1;
+    }
+    
+    let res = binSea(0, l - 1, target);
+    
+    if (res != -1) return res;
+    
+    return binSea(l, n - 1, target)
 };
