@@ -4,24 +4,17 @@
  * @return {number[]}
  */
 var topKFrequent = function(nums, k) {
-    let res = [], q = [], map = new Map();
+    let res = [], numsFreq = new Map();
     
-    // count the frequency of values
     for (let num of nums) {
-        if (!map.has(num)) {
-            map.set(num, 1);
-        } else {
-            map.set(num, map.get(num) + 1);
-        }
+        numsFreq.set(num, numsFreq.get(num) + 1 || 1);
     }
     
-    q = [...map.entries()]; // store entries of map in q
-    q.sort((a, b) => b[1] - a[1]); // sort q in decending order
+    let sortedEntries = [...numsFreq.entries()].sort((a, b) => a[1] - b[1]);
     
-    // shift off q k times and push to res
-    for (let i = 0; i < k; i++) {
-        res.push(q.shift()[0]);
+    while (k > 0) {
+        res.push(sortedEntries.pop()[0]);
+        k--;
     }
-    // return res
     return res;
 };
