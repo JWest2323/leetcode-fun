@@ -4,6 +4,12 @@
  * @return {number}
  */
 var findKthLargest = function(nums, k) {
-    nums.sort((a, b) => b - a);
-    return nums[k - 1];
+    let pq = new MinPriorityQueue();
+    for (let num of nums) {
+        pq.enqueue(num);
+        if (pq.size() > k) {
+            pq.dequeue();
+        }
+    }
+    return pq.front().element;
 };
