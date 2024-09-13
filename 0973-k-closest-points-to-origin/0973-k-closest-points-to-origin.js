@@ -3,19 +3,27 @@
  * @param {number} k
  * @return {number[][]}
  */
-var kClosest = function(points, k) {    
-    let res = [], distMap = new Map();
-    
-    for (let [x, y] of points) {
-        let dist = Math.pow(x, 2) + Math.pow(y, 2);
-        distMap.set([x,y], dist);
+var kClosest = function(points, k) {
+    let distMap = new Map(), res = [];
+
+    for (let idx = 0; idx < points.length; idx++) {
+        let [x, y] = points[idx];
+        let distance = Math.pow(x, 2) + Math.pow(y, 2);
+
+        if (!distMap.has(distance)) distMap.set(distance, []);
+        distMap.get(distance).push(idx);
     }
-    let sortedDistances = [...distMap.entries()].sort((a, b) => b[1] - a[1]);
+
+    let sortedEntries = [...distMap.entries()].sort((a, b) => b[0] - a[0]);
     
     while (k > 0) {
-        res.push(sortedDistances.pop()[0]);
-        k--
+        let [dist, indices] = sortedEntries.pop();
+        for (let i = 0; i < indices.length; i++) {
+            res.push(points[indices[i]]);
+            k--;
+            if (!k) break;
+        }
     }
-    
+
     return res;
 };
