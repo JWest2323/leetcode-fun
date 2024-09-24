@@ -11,25 +11,26 @@
  * @return {number[][]}
  */
 var verticalOrder = function(root) {
-    let colMap = new Map(), res = [];
-
-    const dfs = (node, colSum) => {
-        if (!node) return;
-        if (!colMap.has(colSum)) 
-            colMap.set(colSum, []);
-        colMap.get(colSum).push(node.val);
-
-        dfs(node.left, colSum - 1);
-        dfs(node.right, colSum + 1);
-    }
-
-    dfs(root, 0);
-
-    let [minIdx, maxIdx] 
-        = [Math.min(...colMap.keys()) , Math.max(...colMap.keys())];
+    if (!root) return [];
     
-    for (let i = minIdx; i <= maxIdx; i++) {
-        res.push(colMap.get(i));
+    let map = {}, q = [[root, 0]];
+    let min = 0, max = 0;
+
+    while (q.length) {
+        let [node, col] = q.shift();
+
+        map[col] = [...(map[col] ?? []), node.val];
+        min = Math.min(min, col);
+        max = Math.max(max, col);
+
+        if (node.left) q.push([node.left, col - 1]);
+        if (node.right) q.push([node.right, col + 1]);
     }
+
+    let res = [];
+
+    while (min <= max) 
+        res.push(map[min++]);
+    
     return res;
 };
