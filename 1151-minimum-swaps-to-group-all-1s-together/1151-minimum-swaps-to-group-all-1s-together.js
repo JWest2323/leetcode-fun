@@ -3,23 +3,20 @@
  * @return {number}
  */
 var minSwaps = function(data) {
-    let minSwap = Infinity, ones = 0;
+    let maxOnes = 0, totalOnes = 0, oneCount = 0;
+
     data.forEach((bin) => {
-        if (bin == 1) ones++
+        if (bin) totalOnes++
     });
-    
-    const countSwaps = (subarray) => {
-        let swaps = 0;
-        subarray.forEach((bin) => {
-            if (bin == 0) swaps++;
-        });
-        return swaps; 
+
+    let left = 0, right = 0;
+    while (right < data.length) {
+        oneCount += data[right++];
+        if (right - left > totalOnes) {
+            oneCount -= data[left++];
+        }
+        maxOnes = Math.max(maxOnes, oneCount);
     }
 
-    for (let idx = 0; idx <= data.length - ones; idx++) {
-        let slice = data.slice(idx, idx + ones);
-        minSwap = Math.min(minSwap, countSwaps(slice));
-    }
-
-    return minSwap;
+    return totalOnes - maxOnes;
 };
