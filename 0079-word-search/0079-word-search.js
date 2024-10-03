@@ -11,11 +11,16 @@ var exist = function(board, word) {
             return;
         if (i == word.length - 1)
             return true;
+        let temp = board[r][c];
         board[r][c] = '*'
 
-        return (
+        if (
             dfs(i + 1, r + 1 , c) || dfs(i + 1, r - 1, c) || dfs(i + 1, r, c + 1) || dfs(i + 1, r, c - 1)
-        )
+        ) {
+            return true;
+        } else {
+            board[r][c] = temp;
+        }
     }
 
     for (let r = 0; r < m; r++) {
