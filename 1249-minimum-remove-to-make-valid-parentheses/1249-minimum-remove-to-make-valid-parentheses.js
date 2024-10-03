@@ -3,24 +3,30 @@
  * @return {string}
  */
 var minRemoveToMakeValid = function(s) {
-    s = s.split("");
+    let indexesToRemove = new Set();
     let stack = [];
 
-    for (let idx = 0; idx < s.length; idx++) {
-        // push to stack for each open parentheses
-        if (s[idx] === "(")
-            stack.push(idx);
-        else if (s[idx] === ")") {
-            // iff we are at a close and stack !empty, pop from stack
-            if (stack.length) stack.pop();
-            // else no matching open parentheses, set spot in s to empty char
-            else s[idx] = ""; 
+    for (let i = 0; i < s.length; i++) {
+        if (s[i] == '(') {
+            stack.push(i);
+        } else if (s[i] == ')') {
+            if (!stack.length) 
+                indexesToRemove.add(i);
+            else 
+                stack.pop();
         }
     }
 
-    // loop remaining elements for unmatched open parentheses
-    for (let idx of stack) s[idx] = ""; // set spot in s to empty char
 
-    // return the joined valid string s
-    return s.join("");
+    while (stack.length != 0) {
+        indexesToRemove.add(stack.pop());
+    }
+    
+    let res = [];
+    for (let i = 0; i < s.length; i++) {
+        if (!indexesToRemove.has(i)) {
+            res.push(s[i]);
+        }
+    }
+    return res.join('');
 };
