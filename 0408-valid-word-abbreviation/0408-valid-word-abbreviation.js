@@ -4,23 +4,19 @@
  * @return {boolean}
  */
 var validWordAbbreviation = function(word, abbr) {
-    let i = 0, j = 0, number = 0;
+    let p1 = 0, p2 = 0;
+    let n = word.length, m = abbr.length;
 
-    while (i < abbr.length && j < word.length) {
-        if (!isNaN(abbr[i])) {
-            // found digit, build number
-            number = number * 10 + Number(abbr[i]);
-            if (number === 0) return false; // leading zero
-            i++;
-        } else if (number > 0) {
-            // move j ptr by number and reset to 0
-            j += number;
-            number = 0;
-        } else if (abbr[i] == word[j]) {
-            // chars match, incre both ptrs
-            i++, j++;
-        } else 
-            return false 
+    while (p1 < n && p2 < m) {
+        if (!isNaN(abbr[p2])) {
+            let move = '';
+            while (!isNaN(abbr[p2])) move = move + abbr[p2++];
+            p1 += Number(move);
+        } else if (word[p1] !== abbr[p2]) {
+            return false;
+        } else {
+            p1++, p2++;
+        }
     }
-    return i == abbr.length && j + number == word.length;
+    return p1 == word.length && p2 == abbr.length;
 };
