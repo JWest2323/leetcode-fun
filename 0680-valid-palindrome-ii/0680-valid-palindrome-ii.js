@@ -3,20 +3,22 @@
  * @return {boolean}
  */
 var validPalindrome = function(s) {
-    s = s.split('');
+    const checkPali = (str, l, r) => {
+        while (l < r) {
+            if (str[l] !== str[r]) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-    let canDelete = true, l = 0, r = s.length - 1;
+    let l = 0, r = s.length - 1;
 
     while (l < r) {
-        if (s[l] == s[r]) {
-            l++, r--;
-        } else if (!canDelete) {
-            return false;
-        } else {
-            canDelete = false;
-            s.splice(r, 1);
-            l = 0, r = s.length - 1;
-        }
+        if (s[l] !== s[r])
+            return (checkPali(s, l + 1, r) || checkPali(s, l, r - 1));
+        l++, r--;
     }
+
     return true;
 };
