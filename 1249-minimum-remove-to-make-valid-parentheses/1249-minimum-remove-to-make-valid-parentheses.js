@@ -3,30 +3,26 @@
  * @return {string}
  */
 var minRemoveToMakeValid = function(s) {
-    let indexesToRemove = new Set();
     let stack = [];
+    let splitStr = s.split('');
 
     for (let i = 0; i < s.length; i++) {
-        if (s[i] == '(') {
+        let char = s[i];
+        if (char == '(') {
             stack.push(i);
-        } else if (s[i] == ')') {
-            if (!stack.length) 
-                indexesToRemove.add(i);
-            else 
+        } else if (char == ')') {
+            if (!stack.length) {
+                splitStr[i] = '';
+            } else {
                 stack.pop();
+            }
         }
     }
 
+    for (let i = 0; i < stack.length; i++) {
+        let charIdx = stack[i];
+        splitStr[charIdx] = '';
+    }
 
-    while (stack.length != 0) {
-        indexesToRemove.add(stack.pop());
-    }
-    
-    let res = [];
-    for (let i = 0; i < s.length; i++) {
-        if (!indexesToRemove.has(i)) {
-            res.push(s[i]);
-        }
-    }
-    return res.join('');
+    return splitStr.join('');
 };
